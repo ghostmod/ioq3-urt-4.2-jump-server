@@ -1,0 +1,11 @@
+this is a notes file ... keep it here for the time being plz kthx.
+it's for keeping track of the ugly hacks.
+
+PROTOCOL and LEGACY_PROTOCOL are both 70 in urt 4.2
+PROTOCOL and LEGACY_PROTOCOL are both 68 in urt 4.1.x
+
+DEMOEXT is "urtdemo" in urt 4.2
+DEMOEXT is "dm_" in urt 4.1
+
+snd_ignore_base4{1,2}.h
+
