@@ -1776,7 +1776,16 @@ static void SV_Goto_f(client_t *cl) {
 	SV_SendServerCommand(targetCl, "print \"%s teleported to you\n\"", cl->name);
 }
 
+static void SV_ToggleRegainStamina(client_t *cl){
+		      cl->stamina = !cl->stamina;
+		      if(cl->stamina){
+				  SV_SendServerCommand(cl,"print \"Regain stamina activated.\"");
+		      } else {
+				SV_SendServerCommand(cl,"print \"Regain stamina deactivated.\"");
+		      }
+}
 
+			
 static ucmd_t ucmds[] = {
 	{"userinfo", SV_UpdateUserinfo_f},
 	{"disconnect", SV_Disconnect_f},
@@ -1793,7 +1802,8 @@ static ucmd_t ucmds[] = {
 	{"saveposition",SV_SavePosition_f},
 	{"loadposition",SV_LoadPosition_f},
 	{"allowgoto",SV_UserAllowGoto_f},
-
+	{"regainstamina",SV_ToggleRegainStamina},
+	{"stamina",SV_ToggleRegainStamina},
 #ifdef USE_VOIP
 	{"voip", SV_Voip_f},
 #endif

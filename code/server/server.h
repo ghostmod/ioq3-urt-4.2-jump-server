@@ -208,6 +208,7 @@ typedef struct client_s {
 	qboolean	allowGoto;
 	int		lastGotoTime;
 	int 		nospeedCount;
+	qboolean 	stamina;
 } client_t;
 
 //=============================================================================
