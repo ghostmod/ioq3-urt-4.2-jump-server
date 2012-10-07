@@ -70,6 +70,11 @@ cvar_t  *sv_auth_engine;
 serverBan_t serverBans[SERVER_MAXBANS];
 int serverBansCount = 0;
 
+cvar_t	*sv_allowGoto;
+cvar_t	*sv_gotoWaitTime;
+cvar_t	*sv_allowLoadPosition;
+cvar_t	*sv_loadPositionWaitTime;
+cvar_t	*sv_regainStamina;
 /*
 =============================================================================
 
@@ -1077,6 +1082,34 @@ int SV_FrameMsec()
 		return 1;
 }
 
+static void SV_ResetStamina(void)
+{
+    int i;
+    client_t *cl;
+    playerState_t *ps;
+
+    for (i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++)
+    {
+        if (cl->state != CS_ACTIVE)
+            continue;
+
+        ps = SV_GameClientNum(i);
+
+        if (!ps->velocity[0] && !ps->velocity[1] && !ps->velocity[2])
+        {
+
+            if (++cl->nospeedCount >= sv_regainStamina->integer)
+            {
+               *(int*)(gvm->dataBase + 0x11990 + i * 5400) = 30000;
+                cl->nospeedCount = 0;
+            }
+        }
+        else
+            cl->nospeedCount = 0;
+    }
+}
+
+
 /*
 ==================
 SV_Frame
@@ -1194,6 +1227,8 @@ void SV_Frame( int msec ) {
 
 	// send a heartbeat to the master if needed
 	SV_MasterHeartbeat(HEARTBEAT_FOR_MASTER);
+	
+	SV_ResetStamina();
 }
 
 /*

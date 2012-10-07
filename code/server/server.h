@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../qcommon/qcommon.h"
 #include "../game/g_public.h"
 #include "../game/bg_public.h"
+#include "../qcommon/vm_local.h"
 
 //=============================================================================
 
@@ -200,6 +201,13 @@ typedef struct client_s {
 #ifdef LEGACY_PROTOCOL
 	qboolean		compat;
 #endif
+	
+	vec3_t		savedPosition;
+	qboolean	positionIsSaved;
+	int		lastLoadPositionTime;
+	qboolean	allowGoto;
+	int		lastGotoTime;
+	int 		nospeedCount;
 } client_t;
 
 //=============================================================================
@@ -307,6 +315,11 @@ extern  cvar_t  *sv_tellprefix;
 
 extern  cvar_t  *sv_authServerIP;
 extern  cvar_t  *sv_auth_engine;
+extern	cvar_t	*sv_allowGoto;
+extern	cvar_t	*sv_gotoWaitTime;
+extern	cvar_t	*sv_allowLoadPosition;
+extern	cvar_t	*sv_loadPositionWaitTime;
+extern	cvar_t	*sv_regainStamina;
 
 
 //===========================================================
