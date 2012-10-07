@@ -699,9 +699,9 @@ void SV_Init (void)
 	sv_auth_engine = Cvar_Get("sv_auth_engine", "1", CVAR_ROM);
 	
 	sv_allowGoto = Cvar_Get("sv_allowGoto", "0", CVAR_ARCHIVE);
-	sv_gotoWaitTime = Cvar_Get("sv_gotoWaitTime", "180", CVAR_ARCHIVE);
+	sv_gotoWaitTime = Cvar_Get("sv_gotoWaitTime", "10", CVAR_ARCHIVE);
 	sv_allowLoadPosition = Cvar_Get("sv_allowLoadPosition", "0", CVAR_ARCHIVE);
-	sv_loadPositionWaitTime = Cvar_Get("sv_loadPositionWaitTime", "180", CVAR_ARCHIVE);
+	sv_loadPositionWaitTime = Cvar_Get("sv_loadPositionWaitTime", "0", CVAR_ARCHIVE);
 	sv_regainStamina = Cvar_Get("sv_regainStamina","1",CVAR_ARCHIVE);
 
 	// initialize bot cvars so they are listed and can be set before loading the botlib
