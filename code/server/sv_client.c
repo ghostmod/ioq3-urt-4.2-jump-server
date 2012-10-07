@@ -1527,13 +1527,13 @@ SV_DisplayGotoHelp_f
 */
 static void SV_DisplayGotoHelp_f(client_t *cl) {
 	SV_SendServerCommand(cl, "print \"The following are commands for save/load position and goto:\n\"");
-	SV_SendServerCommand(cl, "print \"    \\helpgoto       - show list of commands\n\"");
-	SV_SendServerCommand(cl, "print \"    \\saveposition   - save current position\n\"");
-	SV_SendServerCommand(cl, "print \"    \\loadposition   - load saved position%s\n\"",
+	SV_SendServerCommand(cl, "print \"    /help      - show list of commands\n\"");
+	SV_SendServerCommand(cl, "print \"    /save   - save current position\n\"");
+	SV_SendServerCommand(cl, "print \"    /load  - load saved position%s\n\"",
 			(sv_allowLoadPosition->integer > 0) ? "" : " (currently disabled)");
-	SV_SendServerCommand(cl, "print \"    \\allowgoto 1    - allow others to goto where you are\n\"");
-	SV_SendServerCommand(cl, "print \"    \\allowgoto 0    - disallow others to goto where you are\n\"");
-	SV_SendServerCommand(cl, "print \"    \\goto <client>  - goto another player%s\n\"",
+	SV_SendServerCommand(cl, "print \"    /allowgoto 1    - allow others to goto where you are\n\"");
+	SV_SendServerCommand(cl, "print \"    /allowgoto 0    - disallow others to goto where you are\n\"");
+	SV_SendServerCommand(cl, "print \"    /goto <client>  - goto another player%s\n\"",
 			(sv_allowGoto->integer > 0) ? "" : " (currently disabled)");
 }
 
@@ -1603,10 +1603,7 @@ static void SV_LoadPosition_f(client_t *cl) {
 		SV_SendServerCommand(cl, "print \"You must be alive and in-game when loading saved position.\n\"");
 		return;
 	}
-	if (Cmd_Argc() > 1) {
-		SV_SendServerCommand(cl, "print \"Too many arguments to loadposition command, none expected.\n\"");
-		return;
-	}
+	
 	if (!(cl->positionIsSaved)) {
 		SV_SendServerCommand(cl, "print \"You must save your position first.\n\"");
 		return;
@@ -1626,7 +1623,6 @@ static void SV_LoadPosition_f(client_t *cl) {
 	
 	VectorCopy(cl->savedPosition, myState->origin);
 	cl->lastLoadPositionTime = svs.time;
-	SV_SendServerCommand(cl, "print \"You have been teleported to your last saved position.\n\"");
 }
 
 
@@ -1686,10 +1682,10 @@ static void SV_UserAllowGoto_f(client_t *cl) {
 	SV_SendServerCommand(cl, "print \"Your personal allow goto currently turned %s.\n\"",
 				cl->allowGoto ? "on" : "off");
 	if (cl->allowGoto) {
-		SV_SendServerCommand(cl, "print \"    \\allowgoto 0   - turn it off\n\"");
+		SV_SendServerCommand(cl, "print \"    /allowgoto 0   - turn it off\n\"");
 	}
 	else {
-		SV_SendServerCommand(cl, "print \"    \\allowgoto 1   - turn it on\n\"");
+		SV_SendServerCommand(cl, "print \"    /allowgoto 1   - turn it on\n\"");
 	}
 }
 
@@ -1711,7 +1707,7 @@ static void SV_Goto_f(client_t *cl) {
 		return;
 	}
 	myClId = cl - svs.clients;
-	if (TEAM_SPECTATOR == atoi(Info_ValueForKey(sv.configstrings[548 + myClId], "t"))) {
+	if (TEAM_SPECTATOR == atoi(Info_ValueForKey(sv.configstrings[544 + myClId], "t"))) {
 		SV_SendServerCommand(cl, "print \"You cannot be in spectator mode when using goto.\n\"");
 		return;
 	}
@@ -1740,14 +1736,7 @@ static void SV_Goto_f(client_t *cl) {
 			return;
 		}
 	}
-	if (myState->groundEntityNum != ENTITYNUM_WORLD) {
-		SV_SendServerCommand(cl, "print \"You must be standing on solid ground when using goto.\n\"");
-		return;
-	}
-	if (myState->velocity[0] != 0 || myState->velocity[1] != 0 || myState->velocity[2] != 0) {
-		SV_SendServerCommand(cl, "print \"You must be standing still when using goto.\n\"");
-		return;
-	}
+	
 	targetCl = SV_UserGetPlayerByHandle(Cmd_Argv(1));
 	if (targetCl == NULL) {
 		SV_SendServerCommand(cl, "print \"You specified an invalid goto target client.\n\"");
@@ -1762,7 +1751,7 @@ static void SV_Goto_f(client_t *cl) {
 		return;
 	}
 	targetClId = targetCl - svs.clients;
-	if (TEAM_SPECTATOR == atoi(Info_ValueForKey(sv.configstrings[548 + targetClId], "t"))) {
+	if (TEAM_SPECTATOR == atoi(Info_ValueForKey(sv.configstrings[544 + targetClId], "t"))) {
 		SV_SendServerCommand(cl, "print \"That player is currently in spectator mode.\n\"");
 		return;
 	}
@@ -1784,7 +1773,7 @@ static void SV_Goto_f(client_t *cl) {
 	
 	cl->lastGotoTime = svs.time;
 	SV_SendServerCommand(cl, "print \"Goto executed successfully.\n\"");
-	SV_SendServerCommand(targetCl, "print \"Player teleported to your location: %s\n\"", cl->name);
+	SV_SendServerCommand(targetCl, "print \"%s teleported to you\n\"", cl->name);
 }
 
 
