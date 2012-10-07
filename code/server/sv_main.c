@@ -1095,7 +1095,7 @@ static void SV_ResetStamina(void)
 
         ps = SV_GameClientNum(i);
 
-        if (!ps->velocity[0] && !ps->velocity[1] && !ps->velocity[2])
+        if (!ps->velocity[0] && !ps->velocity[1] && ps->velocity[2] < 3)
         {
 
             if (++cl->nospeedCount >= sv_regainStamina->integer)
