@@ -321,6 +321,8 @@ extern	cvar_t	*sv_gotoWaitTime;
 extern	cvar_t	*sv_allowLoadPosition;
 extern	cvar_t	*sv_loadPositionWaitTime;
 extern	cvar_t	*sv_regainStamina;
+extern	cvar_t	*sv_antiblock;
+
 
 
 //===========================================================
